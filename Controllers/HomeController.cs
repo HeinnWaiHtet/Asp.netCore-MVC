@@ -1,4 +1,5 @@
 ﻿using Asp.netCore_MVC.Models;
+using Asp.netCore_MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Asp.netCore_MVC.Controllers
@@ -31,10 +32,13 @@ namespace Asp.netCore_MVC.Controllers
         /// <returns></returns>
         public IActionResult Details()
         {
-            Employee employee = _employeeRepository.GetEmployeeById(3);
-            this.ViewBag.Title = "Details";
-            this.ViewBag.employee = employee;
-            return this.View(employee);
+            HomeDetailsViewModel viewModel = new HomeDetailsViewModel()
+            {
+                Employee = _employeeRepository.GetEmployeeById(1),
+                Title = "Home Employee Details"
+            };
+
+            return this.View(viewModel);
         }
     }
 }

@@ -1,18 +1,18 @@
-﻿@model Asp.netCore_MVC.Models.Employee
+﻿@model Asp.netCore_MVC.ViewModels.HomeDetailsViewModel
 <html>
     <head>
         <title>Details</title>
     </head>
     <body>
-        <h1>@ViewBag.Title</h1>
+        <h1>@Model?.Title</h1>
         <div>
-            Name : @Model?.Name
+            Name : @Model?.Employee?.Name
         </div>
         <div>
-            Email : @Model?.Email
+            Email : @Model?.Employee?.Email
         </div>
         <div>
-            Department : @Model?.Department
+            Department : @Model?.Employee?.Department
         </div>
     </body>
 </html>
