@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "Hash": "h0dQj2cwKES3rJROhAUcABuY/ms9mU1EG+kvaq2KTsw=",
+  "Source": "Asp.netCore-MVC",
+  "BasePath": "_content/Asp.netCore-MVC",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "Asp.netCore-MVC\\wwwroot",
+      "Source": "Asp.netCore-MVC",
+      "ContentRoot": "C:\\Users\\heinwaihtet\\Desktop\\Asp.netCore-MVC\\wwwroot\\",
+      "BasePath": "_content/Asp.netCore-MVC",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\heinwaihtet\\Desktop\\Asp.netCore-MVC\\wwwroot\\index.html",
+      "SourceId": "Asp.netCore-MVC",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\heinwaihtet\\Desktop\\Asp.netCore-MVC\\wwwroot\\",
+      "BasePath": "_content/Asp.netCore-MVC",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
+    }
+  ]
+}
