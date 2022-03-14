@@ -1,3 +1,5 @@
+using Asp.netCore_MVC.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 /** 
@@ -9,6 +11,8 @@ builder.Services.AddMvc(options =>
     /** check end point routing */
     options.EnableEndpointRouting = false;
 });
+
+builder.Services.AddSingleton<IEmployeeRepository, MockEmployeeRepository>();
 
 
 /**
