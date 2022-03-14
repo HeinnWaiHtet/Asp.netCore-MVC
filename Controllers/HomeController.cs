@@ -24,5 +24,17 @@ namespace Asp.netCore_MVC.Controllers
         {
             return _employeeRepository.GetEmployeeById(2).Name;
         }
+
+        /// <summary>
+        /// Get Employee Details by Id
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Details()
+        {
+            Employee employee = _employeeRepository.GetEmployeeById(2);
+            this.ViewData["Title"] = "Details";
+            this.ViewData["employee"] = employee;
+            return this.View(employee);
+        }
     }
 }

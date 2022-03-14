@@ -1,0 +1,21 @@
+﻿<html>
+    <head>
+        <title>Details</title>
+    </head>
+    <body>
+        <h1>@ViewData["Title"]</h1>
+
+        @{
+            var employee = ViewData["employee"] as Asp.netCore_MVC.Models.Employee;
+        }
+        <div>
+            Name : @employee?.Name
+        </div>
+        <div>
+            Email : @employee?.Email
+        </div>
+        <div>
+            Department : @employee?.Department
+        </div>
+    </body>
+</html>
