@@ -3,19 +3,15 @@
         <title>Details</title>
     </head>
     <body>
-        <h1>@ViewData["Title"]</h1>
-
-        @{
-            var employee = ViewData["employee"] as Asp.netCore_MVC.Models.Employee;
-        }
+        <h1>@ViewBag.Title</h1>
         <div>
-            Name : @employee?.Name
+            Name : @ViewBag.Employee?.Name
         </div>
         <div>
-            Email : @employee?.Email
+            Email : @ViewBag.Employee?.Email
         </div>
         <div>
-            Department : @employee?.Department
+            Department : @ViewBag.Employee?.Department
         </div>
     </body>
 </html>
