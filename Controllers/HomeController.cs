@@ -31,7 +31,7 @@ namespace Asp.netCore_MVC.Controllers
         /// <returns></returns>
         public IActionResult Details()
         {
-            Employee employee = _employeeRepository.GetEmployeeById(1);
+            Employee employee = _employeeRepository.GetEmployeeById(3);
             this.ViewBag.Title = "Details";
             this.ViewBag.employee = employee;
             return this.View(employee);
