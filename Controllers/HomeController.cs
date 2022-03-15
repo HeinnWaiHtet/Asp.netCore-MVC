@@ -21,9 +21,10 @@ namespace Asp.netCore_MVC.Controllers
         /// Default Index Method
         /// </summary>
         /// <returns></returns>
-        public string Index()
+        public IActionResult Index()
         {
-            return _employeeRepository.GetEmployeeById(2).Name;
+            var employee = this._employeeRepository.GetAllEmployees();
+            return this.View(employee);
         }
 
         /// <summary>
