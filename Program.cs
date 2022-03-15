@@ -34,6 +34,16 @@ if (app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 /** Configure MVC controller with default routes */
-app.UseMvcWithDefaultRoute();
+//app.UseMvcWithDefaultRoute();
+
+/** Configure Conventional Routing With Default Routes */
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.UseMvc(route =>
+{
+    route.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+});
 
 app.Run();

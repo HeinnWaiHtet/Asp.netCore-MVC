@@ -31,11 +31,11 @@ namespace Asp.netCore_MVC.Controllers
         /// Get Employee Details by Id
         /// </summary>
         /// <returns></returns>
-        public IActionResult Details()
+        public IActionResult Details(int? id)
         {
             HomeDetailsViewModel viewModel = new HomeDetailsViewModel()
             {
-                Employee = _employeeRepository.GetEmployeeById(1),
+                Employee = _employeeRepository.GetEmployeeById(id ?? 1),
                 Title = "Home Employee Details"
             };
 
