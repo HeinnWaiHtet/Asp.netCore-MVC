@@ -3,17 +3,31 @@
     ViewBag.Title = "Employee Data";
 }
 
-<h1>@Model?.Title</h1>
-<div>
-    Name : @Model?.Employee?.Name
-</div>
-<div>
-    Email : @Model?.Employee?.Email
-</div>
-<div>
-    Department : @Model?.Employee?.Department
+<div class="row justify-content-center m-3">
+    <div class="col-sm-8">
+        <div class="card">
+            <div class="card-header">
+                @Model?.Employee?.Name
+            </div>
+
+            <div class="card-body text-center">
+                <img src="~/images/car.jpg" class="card-img" style="height : 300px;"
+                     asp-append-version="true" />
+                <h4> Employee Id : @Model?.Employee?.Id</h4>
+                <h4>Email : @Model?.Employee?.Email</h4>
+                <h4>Address : @Model?.Employee?.Department.ToString()</h4>
+            </div>
+            <div class="card-footer text-center">
+                <a asp-controller="home" asp-action="index"
+                   class="btn btn-success">Back</a>
+                <a href="#" class="btn btn-primary">Edit</a>
+                <a href="#" class="btn btn-primary">Create</a>
+            </div>
+        </div>
+    </div>
 </div>
 
+
 @section Scripts{
-    <script src="~/js/site.js"></script>
+<script src="~/js/site.js"></script>
 }
