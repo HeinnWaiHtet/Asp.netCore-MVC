@@ -6,11 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
  * Add services to the container.
  */
 /** Add MVC service */
-builder.Services.AddMvc(options =>
-{
-    /** check end point routing */
-    options.EnableEndpointRouting = false;
-});
+//builder.Services.AddMvc(options =>
+//{
+//    /** check end point routing */
+//    options.EnableEndpointRouting = false;
+//});
+builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton<IEmployeeRepository, MockEmployeeRepository>();
 
@@ -19,8 +20,6 @@ builder.Services.AddSingleton<IEmployeeRepository, MockEmployeeRepository>();
  * Configure the HTTP request pipeline.
  */
 var app = builder.Build();
-
-app.MapGet("/", () => "Hello World!");
 
 /** Check Development mode and add Developer Exception */
 if (app.Environment.IsDevelopment())
@@ -37,13 +36,7 @@ app.UseStaticFiles();
 //app.UseMvcWithDefaultRoute();
 
 /** Configure Conventional Routing With Default Routes */
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.UseMvc(route =>
-{
-    route.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
-});
-
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();
