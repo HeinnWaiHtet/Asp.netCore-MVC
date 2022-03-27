@@ -14,7 +14,7 @@ namespace Asp.netCore_MVC.Controllers
         /// <param name="employeeRepository"></param>
         public HomeController(IEmployeeRepository employeeRepository)
         {
-            _employeeRepository = new MockEmployeeRepository();
+            _employeeRepository = employeeRepository;
         }
 
         /// <summary>

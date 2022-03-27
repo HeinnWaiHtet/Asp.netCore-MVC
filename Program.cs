@@ -17,7 +17,7 @@ builder.Services.AddDbContextPool<AppDbContext>(
         builder.Configuration.GetConnectionString("EmployeeDbConnection")));
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddSingleton<IEmployeeRepository, MockEmployeeRepository>();
+builder.Services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
 
 
 /**
