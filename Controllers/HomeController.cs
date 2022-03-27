@@ -60,8 +60,13 @@ namespace Asp.netCore_MVC.Controllers
         [HttpPost]
         public IActionResult Create(Employee employee)
         {
-            var newEmployee = _employeeRepository.Add(employee);
-            return this.RedirectToAction("details", new { id = newEmployee.Id });
+            if (ModelState.IsValid)
+            {
+                var newEmployee = _employeeRepository.Add(employee);
+                return this.RedirectToAction("details", new { id = newEmployee.Id });
+            }
+
+            return this.View();
         }
     }
 }
