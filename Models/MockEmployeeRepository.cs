@@ -3,7 +3,7 @@
     public class MockEmployeeRepository : IEmployeeRepository
     {
         #region Properties
-        private readonly IList<Employee> _employeeList;
+        private IList<Employee> _employeeList;
         #endregion
 
         #region Public Methods
@@ -15,11 +15,23 @@
         {
             _employeeList = new List<Employee>()
             {
-                new Employee(){ Id = 1, Name ="Hein Wai Htet",Department = "IT"},
-                new Employee(){ Id = 2, Name = "Aye Chan May",Department = "HR"},
-                new Employee(){ Id = 3, Name = "HWH",Department = "System Architect"},
-                new Employee(){ Id = 4, Name = "ACM", Department = "Accounting"}
+                new Employee(){ Id = 1, Name ="Hein Wai Htet",Department = Dept.IT},
+                new Employee(){ Id = 2, Name = "Aye Chan May",Department = Dept.HR},
+                new Employee(){ Id = 3, Name = "HWH",Department = Dept.Software},
+                new Employee(){ Id = 4, Name = "ACM", Department = Dept.Accounting}
             };
+        }
+
+        /// <summary>
+        /// Add Employee data from send model value
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns></returns>
+        public Employee Add(Employee employee)
+        {
+            employee.Id = this._employeeList.Max(emp => emp.Id) + 1;
+            this._employeeList.Add(employee);
+            return employee;
         }
 
         /// <summary>

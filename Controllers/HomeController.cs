@@ -6,7 +6,7 @@ namespace Asp.netCore_MVC.Controllers
 {
     public class HomeController : Controller
     {
-        private IEmployeeRepository _employeeRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
         /// <summary>
         /// HomeController Constructor
@@ -40,6 +40,28 @@ namespace Asp.netCore_MVC.Controllers
             };
 
             return this.View(viewModel);
+        }
+
+        /// <summary>
+        /// Create Employee View
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return this.View();
+        }
+
+        /// <summary>
+        /// Create New Employee And Redirect to details after create
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult Create(Employee employee)
+        {
+            var newEmployee = _employeeRepository.Add(employee);
+            return this.RedirectToAction("details", new { id = newEmployee.Id });
         }
     }
 }
