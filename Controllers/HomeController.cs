@@ -68,5 +68,16 @@ namespace Asp.netCore_MVC.Controllers
 
             return this.View();
         }
+
+        /// <summary>
+        /// Remove Emplyoee By Request Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IActionResult Delete(int id)
+        {
+            _employeeRepository.Delete(id);
+            return this.RedirectToAction("index");
+        }
     }
 }

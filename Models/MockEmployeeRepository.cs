@@ -35,6 +35,22 @@
         }
 
         /// <summary>
+        /// Delete Employe By request Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Employee Delete(int id)
+        {
+            var employee = this._employeeList.FirstOrDefault(emp => emp.Id == id);
+            if (employee != null)
+            {
+                this._employeeList.Remove(employee);
+            }
+
+            return employee ?? new Employee();
+        }
+
+        /// <summary>
         /// Get Alll Employee Data
         /// </summary>
         /// <returns></returns>
@@ -48,6 +64,24 @@
         public Employee GetEmployeeById(int id)
         {
             return _employeeList?.FirstOrDefault(emp => emp.Id == id) ?? new Employee();
+        }
+
+        /// <summary>
+        /// Update employee data
+        /// </summary>
+        /// <param name="updateEmployee"></param>
+        /// <returns></returns>
+        public Employee Update(Employee updateEmployee)
+        {
+            var employee = this._employeeList.FirstOrDefault(emp => emp.Id == updateEmployee.Id);
+            if(employee != null)
+            {
+                employee.Name = updateEmployee.Name;
+                employee.Email = updateEmployee.Email;
+                employee.Department = updateEmployee.Department;
+            }
+
+            return employee ?? new Employee();
         }
         #endregion
     }
