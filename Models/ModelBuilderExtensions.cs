@@ -7,9 +7,30 @@ namespace Asp.netCore_MVC.Models
         public static void Seed(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>().HasData(
-                new Employee() { Id = 1, Name = "Hein Wai Htet", Email = "heinwaihtet@gmail.com", Department = Dept.IT },
-                new Employee() { Id = 2, Name = "Aye Chan May", Email = "acm@gmail.com", Department = Dept.HR },
-                new Employee() { Id = 3, Name = "HWH", Email = "hwh@gmail.com", Department = Dept.Software });
+                new Employee()
+                {
+                    Id = 1,
+                    Name = "Hein Wai Htet",
+                    Email = "heinwaihtet@gmail.com",
+                    Department = Dept.IT,
+                    PhotoPath = String.Empty
+                },
+                new Employee()
+                {
+                    Id = 2,
+                    Name = "Aye Chan May",
+                    Email = "acm@gmail.com",
+                    Department = Dept.HR,
+                    PhotoPath = String.Empty
+                },
+                new Employee()
+                {
+                    Id = 3,
+                    Name = "HWH",
+                    Email = "hwh@gmail.com",
+                    Department = Dept.Software,
+                    PhotoPath = String.Empty
+                });
         }
     }
 }

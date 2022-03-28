@@ -6,12 +6,13 @@
 <div class="card-group">
     @foreach (var employee in Model)
     {
-        <div class="card m-3">
+        var photoPath = "~/images/" + (string.IsNullOrEmpty(employee.PhotoPath) ? "2.jpg" : employee.PhotoPath);
+        <div class="card m-3" style="min-width: 18rem; max-width: 30.5%;">
             <div class="card-header">
                 <h3> @employee.Name </h3>
             </div>
-            <img class="card-img-top"
-             src="~/images/2.jpg" style="height:200px;"
+            <img class="card-img-top imageThumbnail"
+             src="@photoPath" style="height:200px;"
              asp-append-version="true" />
             <div class="card-footer text-center">
                 <a class="btn btn-success m-1"

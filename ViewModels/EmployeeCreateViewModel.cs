@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Asp.netCore_MVC.Models;
+using System.ComponentModel.DataAnnotations;
 
-namespace Asp.netCore_MVC.Models
+namespace Asp.netCore_MVC.ViewModels
 {
-    public class Employee
+    public class EmployeeCreateViewModel
     {
-        public int Id { get; set; }
 
         [Required]
         [MaxLength(50, ErrorMessage = "Name cannot exceed 50 characters")]
@@ -16,9 +16,9 @@ namespace Asp.netCore_MVC.Models
         [Display(Name = "Employee Email")]
         public string Email { get; set; }
 
-        [Required, Display(Name = "Select Your Department")]
+        [Required,Display(Name = "Select Your Department")]
         public Dept? Department { get; set; }
 
-        public string PhotoPath { get; set; }
+        public IFormFile Photo { get; set; }
     }
 }
