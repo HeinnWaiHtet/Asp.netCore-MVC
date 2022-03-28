@@ -68,16 +68,28 @@ namespace Asp.netCore_MVC.Controllers
             if (ModelState.IsValid)
             {
                 string uniqueFileName = null;
-                if(model.Photo != null)
+                if(model.Photo != null && model.Photo.Count > 0)
                 {
-                    // create uploadFolder by using webhosting directory
-                    string uploadFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");
-                    // Get Unique Identifier using Guid
-                    uniqueFileName = $"{Guid.NewGuid().ToString()}_{model.Photo.FileName}";
-                    // upload local photo path
-                    string filePath = Path.Combine(uploadFolder, uniqueFileName);
-                    // copy image to local folder using IformFile CopyTo
-                    model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                    //// create uploadFolder by using webhosting directory
+                    //string uploadFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");
+                    //// Get Unique Identifier using Guid
+                    //uniqueFileName = $"{Guid.NewGuid().ToString()}_{model.Photo.FileName}";
+                    //// upload local photo path
+                    //string filePath = Path.Combine(uploadFolder, uniqueFileName);
+                    //// copy image to local folder using IformFile CopyTo
+                    //model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
+
+                    foreach(var photo in model.Photo)
+                    {
+                        // create uploadFolder by using webhosting directory
+                        string uploadFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");
+                        // Get Unique Identifier using Guid
+                        uniqueFileName = $"{Guid.NewGuid().ToString()}_{photo.FileName}";
+                        // upload local photo path
+                        string filePath = Path.Combine(uploadFolder, uniqueFileName);
+                        // copy image to local folder using IformFile CopyTo
+                        photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                    }
                 }
 
                 var employee = new Employee()
