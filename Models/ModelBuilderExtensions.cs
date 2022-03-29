@@ -4,6 +4,10 @@ namespace Asp.netCore_MVC.Models
 {
     public static class ModelBuilderExtensions
     {
+        /// <summary>
+        /// Set Employee Deafult Row Data when create model
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         public static void Seed(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>().HasData(

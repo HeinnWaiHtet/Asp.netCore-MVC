@@ -4,12 +4,22 @@
 
     public class SQLEmployeeRepository : IEmployeeRepository
     {
+        #region Properties
+
         private readonly AppDbContext context;
+
+        #endregion
+
+        #region Constructor
 
         public SQLEmployeeRepository(AppDbContext context)
         {
             this.context = context;
         }
+
+        #endregion
+
+        #region PublicMethods
 
         /// <summary>
         /// Add Employee Data To Database
@@ -33,7 +43,7 @@
         public Employee Delete(int id)
         {
             var employee = this.context.Employees.Find(id);
-            if(employee != null)
+            if (employee != null)
             {
                 this.context.Employees.Remove(employee);
                 this.context.SaveChanges();
@@ -62,6 +72,11 @@
             return this.context.Employees.Find(id);
         }
 
+        /// <summary>
+        /// Update Employee Data
+        /// </summary>
+        /// <param name="employeeChanges"></param>
+        /// <returns></returns>
         public Employee Update(Employee employeeChanges)
         {
             var employee = this.context.Employees.Attach(employeeChanges);
@@ -69,5 +84,8 @@
             context.SaveChanges();
             return employeeChanges;
         }
+
+        #endregion
+
     }
 }

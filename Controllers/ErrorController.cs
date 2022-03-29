@@ -6,6 +6,8 @@ namespace Asp.netCore_MVC.Controllers
 {
     public class ErrorController : Controller
     {
+        #region RequestNotFoundErrorHandling
+
         /// <summary>
         /// Request Url not found Error Page With Error StatusCode URL
         /// </summary>
@@ -26,6 +28,14 @@ namespace Asp.netCore_MVC.Controllers
             return View("NotFound");
         }
 
+        #endregion
+
+        #region GlobalExceptionHandling
+
+        /// <summary>
+        /// Global Excetion Handling Error Page Like Throw Exception Error
+        /// </summary>
+        /// <returns></returns>
         [Route("Error")]
         [AllowAnonymous]
         public IActionResult Error()
@@ -37,5 +47,7 @@ namespace Asp.netCore_MVC.Controllers
             ViewBag.Stacktrace = exceptionDetails?.Error.StackTrace;
             return this.View("Error");
         }
+
+        #endregion
     }
 }

@@ -6,8 +6,12 @@ namespace Asp.netCore_MVC.Controllers
 {
     public class HomeController : Controller
     {
+        #region PrivateInstance
+
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IWebHostEnvironment hostingEnvironment;
+
+        #endregion
 
         #region HomeConstructor
 
@@ -47,7 +51,6 @@ namespace Asp.netCore_MVC.Controllers
         /// <returns></returns>
         public IActionResult Details(int? id)
         {
-            throw new Exception("Something Wrong");
             var employee = _employeeRepository.GetEmployeeById(id.Value);
             if(employee == null)
             {
@@ -158,6 +161,8 @@ namespace Asp.netCore_MVC.Controllers
 
         #endregion
 
+        #region DeleteEmployee
+
         /// <summary>
         /// Remove Emplyoee By Request Id
         /// </summary>
@@ -168,6 +173,8 @@ namespace Asp.netCore_MVC.Controllers
             _employeeRepository.Delete(id);
             return this.RedirectToAction("index");
         }
+
+        #endregion
 
         #region PrivateMethod
 
