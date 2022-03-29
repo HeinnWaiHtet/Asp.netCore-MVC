@@ -34,7 +34,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseStatusCodePagesWithRedirects("/Error/{0}"); // Default Status Code Error Page
+    app.UseStatusCodePagesWithReExecute("/Error/{0}"); // Default Status Code Error Page
 }
 
 /** add static file middleware for connect under wwwroot */
