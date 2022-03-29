@@ -32,6 +32,10 @@ if (app.Environment.IsDevelopment())
     options.SourceCodeLineCount = 10;
     app.UseDeveloperExceptionPage(options);
 }
+else
+{
+    app.UseStatusCodePages(); // Default Status Code Error Page
+}
 
 /** add static file middleware for connect under wwwroot */
 app.UseStaticFiles();
