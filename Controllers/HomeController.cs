@@ -47,9 +47,16 @@ namespace Asp.netCore_MVC.Controllers
         /// <returns></returns>
         public IActionResult Details(int? id)
         {
+            var employee = _employeeRepository.GetEmployeeById(id.Value);
+            if(employee == null)
+            {
+                Response.StatusCode = 404;
+                return this.View("EmployeeNotFound", id.Value);
+            }
+
             HomeDetailsViewModel viewModel = new HomeDetailsViewModel()
             {
-                Employee = _employeeRepository.GetEmployeeById(id ?? 1),
+                Employee = employee,
                 Title = "Home Employee Details"
             };
 

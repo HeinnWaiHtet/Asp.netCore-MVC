@@ -59,7 +59,7 @@
         /// <exception cref="NotImplementedException"></exception>
         public Employee GetEmployeeById(int id)
         {
-            return this.context.Employees.Find(id) ?? new Employee();
+            return this.context.Employees.Find(id);
         }
 
         public Employee Update(Employee employeeChanges)
