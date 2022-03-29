@@ -47,6 +47,7 @@ namespace Asp.netCore_MVC.Controllers
         /// <returns></returns>
         public IActionResult Details(int? id)
         {
+            throw new Exception("Something Wrong");
             var employee = _employeeRepository.GetEmployeeById(id.Value);
             if(employee == null)
             {

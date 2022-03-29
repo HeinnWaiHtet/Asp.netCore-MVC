@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Asp.netCore_MVC.Controllers
@@ -23,6 +24,18 @@ namespace Asp.netCore_MVC.Controllers
                     break;
             }
             return View("NotFound");
+        }
+
+        [Route("Error")]
+        [AllowAnonymous]
+        public IActionResult Error()
+        {
+            var exceptionDetails = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+
+            ViewBag.ExceptionPath = exceptionDetails?.Path;
+            ViewBag.ExceptionMessage = exceptionDetails?.Error.Message;
+            ViewBag.Stacktrace = exceptionDetails?.Error.StackTrace;
+            return this.View("Error");
         }
     }
 }

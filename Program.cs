@@ -34,6 +34,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
+    app.UseExceptionHandler("/Error");
     app.UseStatusCodePagesWithReExecute("/Error/{0}"); // Default Status Code Error Page
 }
 
