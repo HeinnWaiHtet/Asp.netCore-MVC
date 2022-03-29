@@ -19,6 +19,6 @@ namespace Asp.netCore_MVC.ViewModels
         [Required,Display(Name = "Select Your Department")]
         public Dept? Department { get; set; }
 
-        public IFormFile Photo { get; set; }
+        public IFormFile? Photo { get; set; }
     }
 }
