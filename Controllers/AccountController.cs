@@ -69,5 +69,63 @@ namespace Asp.netCore_MVC.Controllers
 
         #endregion
 
+        #region LoginUser
+
+        /// <summary>
+        /// Login View
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Login User Using Email and Password
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+
+                /** Login Create User using SignInManager.SignInAsync */
+                var result = await signInManager.PasswordSignInAsync(
+                    model.Email,
+                    model.Password,
+                    model.RememberMe,
+                    false);
+
+                if (result.Succeeded)
+                {
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                /** Add Model Error */
+                ModelState.AddModelError("", "Login Failed");
+            }
+
+            return View(model);
+        }
+
+        #endregion
+
+        #region Logout
+
+        /// <summary>
+        /// Logout When Click Logout Button
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Index", "home");
+        }
+
+        #endregion
+
     }
 }
