@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Asp.netCore_MVC.Models
 {
-    public class AppDbContext: DbContext
+    public class AppDbContext: IdentityDbContext
     {
         #region Constructor
 
@@ -27,6 +28,7 @@ namespace Asp.netCore_MVC.Models
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Seed();
         }
         #endregion

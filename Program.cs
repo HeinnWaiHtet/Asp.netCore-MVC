@@ -1,4 +1,5 @@
 using Asp.netCore_MVC.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NLog;
 using NLog.Web;
@@ -17,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContextPool<AppDbContext>(
     options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("EmployeeDbConnection")));
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddControllersWithViews();
 
 /** Configure Nlog Setting */
@@ -47,6 +49,7 @@ else
 
 /** add static file middleware for connect under wwwroot */
 app.UseStaticFiles();
+app.UseAuthentication();
 
 /** Configure MVC controller with default routes */
 //app.UseMvcWithDefaultRoute();
