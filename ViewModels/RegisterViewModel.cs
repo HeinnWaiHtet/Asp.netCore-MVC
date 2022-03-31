@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace Asp.netCore_MVC.ViewModels
 {
@@ -7,6 +8,7 @@ namespace Asp.netCore_MVC.ViewModels
         [Required]
         [EmailAddress(ErrorMessage ="Enter Valid Email Address")]
         [Display(Name = "Email Address")]
+        [Remote(action: "IsEmailInUse", controller: "Account")]
         public string? Email { get; set; }
 
         [Required(ErrorMessage = "Enter Your Password")]

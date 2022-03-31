@@ -38,6 +38,22 @@ namespace Asp.netCore_MVC.Controllers
         }
 
         /// <summary>
+        /// Check Register Email is in used or not
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        [AcceptVerbs("Get", "Post")]
+        [AllowAnonymous]
+        public async Task<ActionResult> IsEmailInUse(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+
+            return user == null
+                ? Json(true)
+                : Json($"Email {email} is already in use");
+        }
+
+        /// <summary>
         /// Register User using UserManager.CreateAsync and singin using signInManager
         /// </summary>
         /// <param name="model"></param>

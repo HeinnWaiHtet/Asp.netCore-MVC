@@ -10,16 +10,16 @@ namespace Asp.netCore_MVC.ViewModels
         /// </summary>
         [Required]
         [MaxLength(50, ErrorMessage = "Name cannot exceed 50 characters")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Employee Email
         /// </summary>
         [Required]
-        [RegularExpression(@"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z",
+        [RegularExpression(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$",
             ErrorMessage = "Check your email format")]
         [Display(Name = "Employee Email")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         /// <summary>
         /// Employee Department
