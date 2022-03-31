@@ -108,7 +108,7 @@ namespace Asp.netCore_MVC.Controllers
                 if (result.Succeeded)
                 {
                     /** Check Whether returnUrl has or not and redirect to request URL */
-                    if (!string.IsNullOrEmpty(returnUrl))
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
                     }
