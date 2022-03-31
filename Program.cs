@@ -1,5 +1,7 @@
 using Asp.netCore_MVC.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using NLog;
 using NLog.Web;
@@ -29,7 +31,14 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(option =>
     option.Password.RequireNonAlphanumeric = false;
 }).AddEntityFrameworkStores<AppDbContext>();
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(config =>
+{
+    /** Cofigure Authorization Polic where user is authorize or not */
+    var policy = new AuthorizationPolicyBuilder()
+    .RequireAuthenticatedUser()
+    .Build();
+    config.Filters.Add(new AuthorizeFilter(policy));
+});
 
 /** Configure Nlog Setting */
 builder.Logging.ClearProviders();
@@ -59,7 +68,10 @@ else
 
 /** add static file middleware for connect under wwwroot */
 app.UseStaticFiles();
+/** add authentication middleware for check whether user is login or not */
 app.UseAuthentication();
+/** add authrization middleware to check whether current user is authorize or not */
+app.UseAuthorization();
 
 /** Configure MVC controller with default routes */
 //app.UseMvcWithDefaultRoute();

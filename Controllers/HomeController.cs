@@ -1,9 +1,11 @@
 ﻿using Asp.netCore_MVC.Models;
 using Asp.netCore_MVC.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Asp.netCore_MVC.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         #region PrivateInstance
@@ -35,6 +37,7 @@ namespace Asp.netCore_MVC.Controllers
         /// Default Index Method
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var employee = this._employeeRepository.GetAllEmployees();
@@ -49,6 +52,7 @@ namespace Asp.netCore_MVC.Controllers
         /// Get Employee Details by Id
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         public IActionResult Details(int? id)
         {
             var employee = _employeeRepository.GetEmployeeById(id.Value);
