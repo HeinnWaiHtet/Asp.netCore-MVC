@@ -86,13 +86,14 @@ namespace Asp.netCore_MVC.Controllers
         }
 
         /// <summary>
-        /// Login User Using Email and Password
+        /// Login User Using Email and Password and Return To Redirect link after authenticate
         /// </summary>
         /// <param name="model"></param>
+        /// <param name="returnUrl"></param>
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -106,6 +107,12 @@ namespace Asp.netCore_MVC.Controllers
 
                 if (result.Succeeded)
                 {
+                    /** Check Whether returnUrl has or not and redirect to request URL */
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+
                     return this.RedirectToAction("Index", "Home");
                 }
 
