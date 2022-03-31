@@ -18,7 +18,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContextPool<AppDbContext>(
     options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("EmployeeDbConnection")));
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+/** Configure IdentiyUser Setting With Password Options */
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(option =>
+{
+    option.Password.RequiredLength = 3;
+    option.Password.RequireDigit = false;
+    option.Password.RequireLowercase = false;
+    option.Password.RequireUppercase = false;
+    option.Password.RequiredUniqueChars = 3;
+    option.Password.RequireNonAlphanumeric = false;
+}).AddEntityFrameworkStores<AppDbContext>();
+
 builder.Services.AddControllersWithViews();
 
 /** Configure Nlog Setting */
