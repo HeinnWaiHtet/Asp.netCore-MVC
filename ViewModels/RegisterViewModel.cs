@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.netCore_MVC.Utilities;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace Asp.netCore_MVC.ViewModels
@@ -9,6 +10,7 @@ namespace Asp.netCore_MVC.ViewModels
         [EmailAddress(ErrorMessage ="Enter Valid Email Address")]
         [Display(Name = "Email Address")]
         [Remote(action: "IsEmailInUse", controller: "Account")]
+        [ValidEmailDomain(allowedDomain: "hwh.com", ErrorMessage = "Domain Name Must Be hwh.com")]
         public string? Email { get; set; }
 
         [Required(ErrorMessage = "Enter Your Password")]
