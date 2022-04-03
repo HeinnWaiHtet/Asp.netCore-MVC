@@ -167,5 +167,115 @@ namespace Asp.netCore_MVC.Controllers
 
         #endregion
 
+        #region EditUserInRole
+
+        /// <summary>
+        /// UserInRole View
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> EditUsersInRole(string id)
+        {
+            ViewBag.roleId = id;
+            /** Get User role by request Roleid */
+            var role = await roleManager.FindByIdAsync(id);
+
+            /** return to error view when request role not found */
+            if (role == null)
+            {
+                ViewBag.ErrorMessage = $"Role with Id {id} cannot be found";
+                return View("NotFound");
+            }
+
+            /** create UserInRole view model */
+            var model = new List<UserRoleViewModel>();
+
+            /** find users that have request role */
+            var userList = await userManager.Users.ToListAsync();
+            foreach (var user in userList)
+            {
+                var userRoleViewModel = new UserRoleViewModel()
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName
+                };
+
+                /** Check user is in role or not */
+                if (await userManager.IsInRoleAsync(user, role.Name))
+                {
+                    userRoleViewModel.IsSelected = true;
+                }
+                else
+                {
+                    userRoleViewModel.IsSelected = false;
+                }
+
+                model.Add(userRoleViewModel);
+            }
+
+            return this.View(model);
+        }
+
+        /// <summary>
+        /// Edit User Role Action
+        /// </summary>
+        /// <param name="model"></param>
+        /// /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> EditUsersInRole(List<UserRoleViewModel> model, string id)
+        {
+            /** Get User role by request Roleid */
+            var role = await roleManager.FindByIdAsync(id);
+
+            /** return to error view when request role not found */
+            if (role == null)
+            {
+                ViewBag.ErrorMessage = $"Role with Id {id} cannot be found";
+                return View("NotFound");
+            }
+            
+            /** Loop Model Data */
+            for(int index = 0; index < model.Count; index++)
+            {
+                /** Get User Data By User Id */
+                var user = await userManager.FindByIdAsync(model[index].UserId);
+
+                IdentityResult result = null;
+
+                /** Check Current User is In role or not */
+                if (model[index].IsSelected && !(await userManager.IsInRoleAsync(user, role.Name)))
+                {
+                    result = await userManager.AddToRoleAsync(user, role.Name); 
+                }
+                else if (!model[index].IsSelected && await userManager.IsInRoleAsync(user, role.Name))
+                {
+                    result = await userManager.RemoveFromRoleAsync(user, role.Name);
+                }
+                else
+                {
+                    continue;
+                }
+
+                /** Check UserRole update finish or not */
+                if (result.Succeeded)
+                {
+                    if(index < (model.Count - 1))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        return RedirectToAction("EditRole", new { Id = id });
+                    }
+                }
+            }
+
+            return this.RedirectToAction("EditRole", new {Id = id});
+        }
+
+        #endregion
+
     }
 }
