@@ -52,7 +52,7 @@ namespace Asp.netCore_MVC.Controllers
                 /** Check Role Create Success or not */
                 if (result.Succeeded)
                 {
-                    return this.RedirectToAction("index", "home");
+                    return this.RedirectToAction("ListRoles");
                 }
 
                 /** Add Error When Role Creation Fail */
@@ -64,6 +64,20 @@ namespace Asp.netCore_MVC.Controllers
             }
 
             return View();
+        }
+        #endregion
+
+        #region GetRoleLists
+
+        /// <summary>
+        /// Get Role List From Role
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult ListRoles()
+        {
+            /** Get All Role Using roleManager */
+            var roleLists = roleManager.Roles;
+            return this.View(roleLists);
         }
         #endregion
 
