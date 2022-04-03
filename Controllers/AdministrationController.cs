@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Asp.netCore_MVC.Controllers
 {
-    [Authorize(Roles = "Admin,User")]
+    [Authorize(Roles = "Admin")]
     public class AdministrationController : Controller
     {
         #region Properties
@@ -279,5 +279,18 @@ namespace Asp.netCore_MVC.Controllers
 
         #endregion
 
+        #region AccessDeniedPage
+
+        /// <summary>
+        /// Go To AccessDenied View
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return this.View();
+        }
+        #endregion
     }
 }

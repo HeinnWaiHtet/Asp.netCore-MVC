@@ -160,5 +160,19 @@ namespace Asp.netCore_MVC.Controllers
 
         #endregion
 
+        #region AccessDeniedPage
+
+        /// <summary>
+        /// Go To AccessDenied View
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return this.View();
+        }
+        #endregion
+
     }
 }
