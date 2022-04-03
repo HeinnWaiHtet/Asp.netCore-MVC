@@ -23,5 +23,8 @@ namespace Asp.netCore_MVC.ViewModels
         [Compare("Password",
             ErrorMessage = "Password and confirmation password do not match.")]
         public string? ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "Enter Your City")]
+        public string City { get; set; }
     }
 }

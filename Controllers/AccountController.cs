@@ -1,4 +1,5 @@
-﻿using Asp.netCore_MVC.ViewModels;
+﻿using Asp.netCore_MVC.Models;
+using Asp.netCore_MVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,15 +10,15 @@ namespace Asp.netCore_MVC.Controllers
     {
         #region Properties
 
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
         #endregion
 
         #region Constructor
 
-        public AccountController(UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -65,7 +66,11 @@ namespace Asp.netCore_MVC.Controllers
             if (ModelState.IsValid)
             {
                 /** Create IdentiyUser object using RegisterViewModel */
-                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { 
+                    UserName = model.Email, 
+                    Email = model.Email,
+                    City = model.City,
+                };
                 /** Create User Using UserManager CreateAsync */
                 var result = await userManager.CreateAsync(user, model.Password);
 

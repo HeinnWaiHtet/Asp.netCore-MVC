@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Asp.netCore_MVC.Models
 {
-    public class AppDbContext: IdentityDbContext
+    public class AppDbContext: IdentityDbContext<ApplicationUser>
     {
         #region Constructor
 

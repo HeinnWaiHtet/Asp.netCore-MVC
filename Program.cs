@@ -21,7 +21,7 @@ builder.Services.AddDbContextPool<AppDbContext>(
     options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("EmployeeDbConnection")));
 /** Configure IdentiyUser Setting With Password Options */
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(option =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
 {
     option.Password.RequiredLength = 3;
     option.Password.RequireDigit = false;
