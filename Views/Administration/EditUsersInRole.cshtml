@@ -15,8 +15,8 @@
                 <div class="form-check m-1">
                     <input type="hidden" asp-for="@Model[index].UserId">
                     <input type="hidden" asp-for="@Model[index].UserName">
-                    <input asp-for="@Model[index].IsSelected" class="form-check-input">
                     <label class="form-check-label">
+                        <input asp-for="@Model[index].IsSelected" class="form-check-input">
                         @Model[index].UserName
                     </label>
                 </div>

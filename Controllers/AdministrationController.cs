@@ -1,11 +1,13 @@
 ﻿using Asp.netCore_MVC.Models;
 using Asp.netCore_MVC.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Asp.netCore_MVC.Controllers
 {
+    [Authorize(Roles = "Admin,User")]
     public class AdministrationController : Controller
     {
         #region Properties
