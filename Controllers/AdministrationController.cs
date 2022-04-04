@@ -183,6 +183,88 @@ namespace Asp.netCore_MVC.Controllers
         }
         #endregion
 
+        #region EditUser
+
+        /// <summary>
+        /// Edit User View
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> EditUser(string id)
+        {
+            /** Get User by request Roleid */
+            var user = await userManager.FindByIdAsync(id);
+
+            /** return to error view when request user not found */
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"Role with Id {id} cannot be found";
+                return View("NotFound");
+            }
+
+            /** Get User claims */
+            var userClaims = await userManager.GetClaimsAsync(user);
+            /** Get User Roles */
+            var userRoles = await userManager.GetRolesAsync(user);
+
+            /** create edit User view model */
+            var model = new EditUserViewModel()
+            {
+                Id = user.Id,
+                Email = user.Email,
+                UserName = user.UserName,
+                City = user.City,
+                Claims = userClaims.Select(c => c.Value).ToList(),
+                Roles = userRoles.ToList()
+            };
+
+            return this.View(model);
+        }
+
+        /// <summary>
+        ///  Edit User Action
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> EditUser(EditUserViewModel model)
+        {
+            /** Get User by request Roleid */
+            var user = await userManager.FindByIdAsync(model.Id);
+
+            /** return to error view when request role not found */
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"Role with Id {model.Id} cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+                user.UserName = model.UserName;
+                user.City = model.City;
+                user.Email = model.Email;
+
+                /** Update User Using UpdateAsync */
+                var result = await userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("ListUsers");
+                }
+
+                /** add error when update found error */
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            return this.View(model);
+        }
+
+        #endregion
+
         #region EditUserInRole
 
         /// <summary>
