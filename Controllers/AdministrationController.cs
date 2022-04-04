@@ -169,6 +169,20 @@ namespace Asp.netCore_MVC.Controllers
 
         #endregion
 
+        #region GetUserLists
+
+        /// <summary>
+        /// Get User List From Users
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult ListUsers()
+        {
+            /** Get All User Using UserManager */
+            var userLists = userManager.Users;
+            return this.View(userLists);
+        }
+        #endregion
+
         #region EditUserInRole
 
         /// <summary>

@@ -76,6 +76,12 @@ namespace Asp.netCore_MVC.Controllers
 
                 if(result.Succeeded)
                 {
+                    /** Check User is login or not and login user role is admin or not */
+                    if(signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("ListUsers", "Administration");
+                    }
+
                     /** Login Create User using SignInManager.SignInAsync */
                     await signInManager.SignInAsync(user, isPersistent: false);
                     return this.RedirectToAction("Index", "Home");
