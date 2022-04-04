@@ -2,27 +2,22 @@
     ViewBag.Title = "Error Page";
 }
 
-<h3>
-    An occured while processing request.
-    The Support team is notified and we are working the fix.
-</h3>
-<h5>
-    Please contact us on swift@gmail.com
-</h5>
-<hr />
-<h3>Exception Details : </h3>
-<div class="alert alert-danger">
-    <h5>Exception Path</h5>
-    <hr />
-    <p>@ViewBag.ExceptionPath</p>
-</div>
-<div class="alert alert-danger">
-    <h5>Exception Message</h5>
-    <hr />
-    <p>@ViewBag.ExceptionMessage</p>
-</div>
-<div class="alert alert-danger">
-    <h5>Exception Stack Trace</h5>
-    <hr />
-    <p>@ViewBag.Stacktrace</p>
-</div>
+@if (ViewBag.ErrorTitle == null)
+{
+    <h3>
+        An error occured while processing request.
+        The Support team is notified and we are working the fix.
+    </h3>
+    <h5>
+        Please contact us on swift@gmail.com
+    </h5>
+}
+else
+{
+    <h1 class="text-danger">
+        @ViewBag.ErrorTitle
+    </h1>
+    <h6>
+        @ViewBag.ErrorMessage
+    </h6>
+}

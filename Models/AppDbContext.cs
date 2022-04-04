@@ -30,6 +30,13 @@ namespace Asp.netCore_MVC.Models
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Seed();
+
+            /** add delete no action when data have */
+            foreach(var foreignKey in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                /** Change default delete on cascade to restrict */
+                foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
+            }
         }
         #endregion
     }
