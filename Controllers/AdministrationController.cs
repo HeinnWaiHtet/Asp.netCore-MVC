@@ -169,6 +169,9 @@ namespace Asp.netCore_MVC.Controllers
 
         #endregion
 
+        #region UserProcess
+
+
         #region GetUserLists
 
         /// <summary>
@@ -262,6 +265,48 @@ namespace Asp.netCore_MVC.Controllers
 
             return this.View(model);
         }
+
+        #endregion
+
+        #region DeleteUser
+
+        /// <summary>
+        ///  Edit User Action
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            /** Get User by request Roleid */
+            var user = await userManager.FindByIdAsync(id);
+
+            /** return to error view when request role not found */
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with Id {id} cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+                /** Delete User using DeleteAsync */
+                var result = await userManager.DeleteAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("ListUsers");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
+                return View("ListUsers");
+            }
+        }
+
+        #endregion
 
         #endregion
 
