@@ -169,6 +169,46 @@ namespace Asp.netCore_MVC.Controllers
 
         #endregion
 
+        #region DeleteRole
+
+        /// <summary>
+        ///  Delete user role by request Id
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> DeleteRole(string id)
+        {
+            /** Get role by request Id */
+            var role = await roleManager.FindByIdAsync(id);
+
+            /** return to error view when request role not found */
+            if (role == null)
+            {
+                ViewBag.ErrorMessage = $"User with Id {id} cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+                /** Delete role using DeleteAsync */
+                var result = await roleManager.DeleteAsync(role);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("ListRoles");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
+                return View("ListRoles");
+            }
+        }
+
+        #endregion
+
         #region UserProcess
 
 
@@ -196,7 +236,7 @@ namespace Asp.netCore_MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> EditUser(string id)
         {
-            /** Get User by request Roleid */
+            /** Get User by request id */
             var user = await userManager.FindByIdAsync(id);
 
             /** return to error view when request user not found */
@@ -233,10 +273,10 @@ namespace Asp.netCore_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUser(EditUserViewModel model)
         {
-            /** Get User by request Roleid */
+            /** Get User by request id */
             var user = await userManager.FindByIdAsync(model.Id);
 
-            /** return to error view when request role not found */
+            /** return to error view when request user not found */
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"Role with Id {model.Id} cannot be found";
@@ -271,17 +311,17 @@ namespace Asp.netCore_MVC.Controllers
         #region DeleteUser
 
         /// <summary>
-        ///  Edit User Action
+        ///  Delete user by request Id
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            /** Get User by request Roleid */
+            /** Get User by request id */
             var user = await userManager.FindByIdAsync(id);
 
-            /** return to error view when request role not found */
+            /** return to error view when request user not found */
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"User with Id {id} cannot be found";
