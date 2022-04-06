@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Security.Claims;
+
 
 namespace Asp.netCore_MVC.Controllers
 {
@@ -412,6 +415,12 @@ namespace Asp.netCore_MVC.Controllers
             return this.View(model);
         }
 
+        /// <summary>
+        /// Save or Remove Roles By Request User
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ManageUserRoles(List<UserRolesViewModel> model, string userId)
         {
@@ -447,6 +456,98 @@ namespace Asp.netCore_MVC.Controllers
             }
 
             return this.RedirectToAction("EditUser", new { Id = userId });
+        }
+        #endregion
+
+        #region ManageUserClaims
+
+        /// <summary>
+        /// Get Roles By Request User
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> ManageUserClaims(string userId)
+        {
+            /** Get User by request id */
+            var user = await userManager.FindByIdAsync(userId);
+
+            /** return to error view when request user not found */
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with Id {userId} cannot be found";
+                return View("NotFound");
+            }
+
+            /** Create User Claims */
+            var existingUserClaims = await userManager.GetClaimsAsync(user);
+
+            var model = new UserClaimsViewModel
+            {
+                UserId = userId
+            };
+
+            /** add claim from claim store */
+            foreach(var claim in ClaimStore.AllClaims)
+            {
+                UserClaim userClaim = new UserClaim
+                {
+                    ClaimType = claim.Type
+                };
+
+                /** Check Current claim is in user or not */
+                if(existingUserClaims.Any(c => c.Type == claim.Type))
+                {
+                    userClaim.IsSelected = true;
+                }
+                model.Claims.Add(userClaim);
+            }
+
+            return this.View(model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ManageUserClaims(UserClaimsViewModel model)
+        {
+            /** Get User by request id */
+            var user = await userManager.FindByIdAsync(model.UserId);
+
+            /** return to error view when request user not found */
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with Id {model.UserId} cannot be found";
+                return View("NotFound");
+            }
+
+            /** Get user claims */
+            var claims = await userManager.GetClaimsAsync(user);
+            /** Remove Current added claims */
+            var result = await userManager.RemoveClaimsAsync(user, claims);
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError(string.Empty, "Cannot Remove user Existing claims");
+                return this.View(model);
+            }
+
+            /** Check Selected claims and added */
+            var currentClaimList = model.Claims.Where(cla => cla.IsSelected).ToList();
+            IList<Claim> claimList = new List<Claim>();
+            foreach(var current in currentClaimList)
+            {
+                claimList.Add(new Claim(current.ClaimType, current.ClaimType));
+            }
+
+            result = await userManager.AddClaimsAsync(user, claimList);
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError(string.Empty, "Cannot add selected claims to user");
+                return this.View(model);
+            }
+
+            return this.RedirectToAction("EditUser", new { Id = model.UserId });
         }
         #endregion
 
