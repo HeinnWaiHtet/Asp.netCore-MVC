@@ -31,6 +31,12 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
     option.Password.RequireNonAlphanumeric = false;
 }).AddEntityFrameworkStores<AppDbContext>();
 
+/** Change Access Denied Route Configuration */
+builder.Services.ConfigureApplicationCookie(option =>
+{
+    option.AccessDeniedPath = new PathString("/Administration/AccessDenied");
+});
+
 builder.Services.AddControllersWithViews(config =>
 {
     /** Cofigure Authorization Polic where user is authorize or not */
