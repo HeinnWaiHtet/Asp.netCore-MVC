@@ -45,6 +45,12 @@ builder.Logging.ClearProviders();
 builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
 builder.Host.UseNLog();
 
+/** Add Claim Policy */
+builder.Services.AddAuthorization(option =>
+{
+    option.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role"));
+});
+
 builder.Services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
 
 

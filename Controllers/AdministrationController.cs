@@ -183,6 +183,7 @@ namespace Asp.netCore_MVC.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(Policy = "DeleteRolePolicy")]
         public async Task<IActionResult> DeleteRole(string id)
         {
             /** Get role by request Id */
