@@ -278,7 +278,7 @@ namespace Asp.netCore_MVC.Controllers
                 Email = user.Email,
                 UserName = user.UserName,
                 City = user.City,
-                Claims = userClaims.Select(c => c.Value).ToList(),
+                Claims = userClaims.Select(c => $"{c.Type} : {c.Value}").ToList(),
                 Roles = userRoles.ToList()
             };
 
@@ -498,7 +498,7 @@ namespace Asp.netCore_MVC.Controllers
                 };
 
                 /** Check Current claim is in user or not */
-                if(existingUserClaims.Any(c => c.Type == claim.Type))
+                if(existingUserClaims.Any(c => c.Type == claim.Type && claim.Value == "true"))
                 {
                     userClaim.IsSelected = true;
                 }
@@ -538,7 +538,7 @@ namespace Asp.netCore_MVC.Controllers
             IList<Claim> claimList = new List<Claim>();
             foreach(var current in currentClaimList)
             {
-                claimList.Add(new Claim(current.ClaimType, current.ClaimType));
+                claimList.Add(new Claim(current.ClaimType, current.IsSelected ? "true" : "false"));
             }
 
             result = await userManager.AddClaimsAsync(user, claimList);
