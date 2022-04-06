@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace Asp.netCore_MVC.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminRolePolicy")]
     public class AdministrationController : Controller
     {
         #region Properties

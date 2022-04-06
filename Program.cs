@@ -49,6 +49,8 @@ builder.Host.UseNLog();
 builder.Services.AddAuthorization(option =>
 {
     option.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role"));
+
+    option.AddPolicy("AdminRolePolicy", policy => policy.RequireRole("Admin"));
 });
 
 builder.Services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
