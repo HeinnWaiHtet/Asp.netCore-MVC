@@ -498,7 +498,7 @@ namespace Asp.netCore_MVC.Controllers
                 };
 
                 /** Check Current claim is in user or not */
-                if(existingUserClaims.Any(c => c.Type == claim.Type && claim.Value == "true"))
+                if(existingUserClaims.Any(c => c.Type == claim.Type && c.Value == "true"))
                 {
                     userClaim.IsSelected = true;
                 }

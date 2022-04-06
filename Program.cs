@@ -56,7 +56,11 @@ builder.Services.AddAuthorization(option =>
 {
     option.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role"));
 
-    option.AddPolicy("EditRolePolicy", policy => policy.RequireClaim("Edit Role", "true"));
+    /** Custom Policy Using RequireAssertion */
+    option.AddPolicy("EditRolePolicy", policy => policy.RequireAssertion(context => 
+        (context.User.IsInRole("Admin") &&
+        context.User.HasClaim(claim => claim.Type == "Edit Role" && claim.Value == "true")) ||
+        context.User.IsInRole("Super Admin")));
 
     option.AddPolicy("AdminRolePolicy", policy => policy.RequireRole("Admin"));
 });
