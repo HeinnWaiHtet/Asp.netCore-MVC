@@ -50,6 +50,8 @@ builder.Services.AddAuthorization(option =>
 {
     option.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role"));
 
+    option.AddPolicy("EditRolePolicy", policy => policy.RequireClaim("Edit Role"));
+
     option.AddPolicy("AdminRolePolicy", policy => policy.RequireRole("Admin"));
 });
 

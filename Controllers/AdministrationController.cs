@@ -102,6 +102,7 @@ namespace Asp.netCore_MVC.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> EditRole(string id)
         {
             /** Get User role by request Roleid */
