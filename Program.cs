@@ -1,6 +1,7 @@
 using Asp.netCore_MVC.Models;
 using Asp.netCore_MVC.Security;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,12 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
 builder.Services.ConfigureApplicationCookie(option =>
 {
     option.AccessDeniedPath = new PathString("/Administration/AccessDenied");
+});
+
+builder.Services.AddAuthentication().AddGoogle(option =>
+{
+    option.ClientId = "104533418000-f1842ur4s3ossfilvda5n5050bqhf75i.apps.googleusercontent.com";
+    option.ClientSecret = "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";
 });
 
 builder.Services.AddControllersWithViews(config =>

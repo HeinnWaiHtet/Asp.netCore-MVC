@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Authentication;
+using System.ComponentModel.DataAnnotations;
 
 namespace Asp.netCore_MVC.ViewModels
 {
@@ -17,6 +18,10 @@ namespace Asp.netCore_MVC.ViewModels
 
         [Display(Name = "Remember Me")]
         public bool RememberMe { get; set; }
+
+        public string? ReturnUrl { get; set; }
+
+        public IList<AuthenticationScheme>? ExternalLogins { get; set; }
 
         #endregion
     }

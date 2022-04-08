@@ -104,12 +104,19 @@ namespace Asp.netCore_MVC.Controllers
         /// <summary>
         /// Login View
         /// </summary>
+        /// <param name="returnUrl"></param>
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login()
+        public async Task<IActionResult> Login(string? returnUrl)
         {
-            return View();
+            var model = new LoginViewModel
+            {
+                ReturnUrl = returnUrl,
+                ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+            };
+
+            return View(model);
         }
 
         /// <summary>
@@ -150,6 +157,30 @@ namespace Asp.netCore_MVC.Controllers
             return View(model);
         }
 
+        #endregion
+
+        #region ExternalLogin
+
+        /// <summary>
+        /// External Login Like Google, Facebook, Twitter
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult ExternalLogins(string provider, string returnUrl)
+        {
+            /** create redirect Url after login using external service */
+            var redirectUrl = Url.Action("ExternalLoginCallback", "Account",
+                new { ReturnUrl = returnUrl });
+
+            /** Login External Services */
+            var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+
+            /** Return TO Local Url After External Login */
+            return new ChallengeResult(provider, properties);
+        }
         #endregion
 
         #region Logout
