@@ -67,18 +67,19 @@ namespace Asp.netCore_MVC.Controllers
             if (ModelState.IsValid)
             {
                 /** Create IdentiyUser object using RegisterViewModel */
-                var user = new ApplicationUser { 
-                    UserName = model.Email, 
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
                     Email = model.Email,
                     City = model.City,
                 };
                 /** Create User Using UserManager CreateAsync */
                 var result = await userManager.CreateAsync(user, model.Password);
 
-                if(result.Succeeded)
+                if (result.Succeeded)
                 {
                     /** Check User is login or not and login user role is admin or not */
-                    if(signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
                         return RedirectToAction("ListUsers", "Administration");
                     }
@@ -88,7 +89,7 @@ namespace Asp.netCore_MVC.Controllers
                     return this.RedirectToAction("Index", "Home");
                 }
 
-                foreach(var errors in result.Errors)
+                foreach (var errors in result.Errors)
                 {
                     /** Add Model Error */
                     ModelState.AddModelError("", errors.Description);
@@ -130,8 +131,19 @@ namespace Asp.netCore_MVC.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl)
         {
+            model.ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             if (ModelState.IsValid)
             {
+                /** Get User By Email */
+                var user = await userManager.FindByEmailAsync(model.Email);
+
+                if (user != null && !user.EmailConfirmed &&
+                    (await userManager.CheckPasswordAsync(user, model.Password)))
+                {
+                    ModelState.AddModelError(string.Empty, "Email not confirmed yet");
+                    return this.View(model);
+                }
 
                 /** Login Create User using SignInManager.SignInAsync */
                 var result = await signInManager.PasswordSignInAsync(
@@ -205,7 +217,7 @@ namespace Asp.netCore_MVC.Controllers
             };
 
             /** check remoteError has or not */
-            if(remoteError != null)
+            if (remoteError != null)
             {
                 ModelState.AddModelError(string.Empty,
                     $"Error From External provider : {remoteError}");
@@ -214,11 +226,31 @@ namespace Asp.netCore_MVC.Controllers
 
             /** Get External login information */
             var info = await signInManager.GetExternalLoginInfoAsync();
-            if(info == null)
+            if (info == null)
             {
                 ModelState.AddModelError(string.Empty,
                     "Error loading external login");
                 return this.View("login", loginViewModel);
+            }
+
+            /** Get LoginEmail Claim Type */
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+            var user = new ApplicationUser
+            {
+                Email = email,
+            };
+
+            /** Check Sign In Email Confirmed or not */
+            if (email != null)
+            {
+                user = await userManager.FindByEmailAsync(email);
+
+                if (user != null && !user.EmailConfirmed)
+                {
+                    ModelState.AddModelError(string.Empty, "Email not confirmed yet");
+                    return this.View("login", loginViewModel);
+                }
             }
 
             /** Login using external login provider */
@@ -227,22 +259,17 @@ namespace Asp.netCore_MVC.Controllers
                 isPersistent: false,
                 bypassTwoFactor: true);
 
-            if(signInResult.Succeeded)
+            if (signInResult.Succeeded)
             {
                 return this.LocalRedirect(returnUrl);
             }
             else
             {
-                /** Get LoginEmail Claim Type */
-                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-
                 /** check email register or not */
                 if (email != null)
                 {
-                    var user = await userManager.FindByEmailAsync(email);
-
                     /** check User is already register or not */
-                    if(user == null)
+                    if (user == null)
                     {
                         user = new ApplicationUser
                         {

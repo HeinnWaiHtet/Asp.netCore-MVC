@@ -13,15 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 /** 
  * Add services to the container.
  */
-/** Add MVC service */
-//builder.Services.AddMvc(options =>
-//{
-//    /** check end point routing */
-//    options.EnableEndpointRouting = false;
-//});
+/** Add Database Configuration */
 builder.Services.AddDbContextPool<AppDbContext>(
     options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("EmployeeDbConnection")));
+
 /** Configure IdentiyUser Setting With Password Options */
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
 {
@@ -31,6 +27,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
     option.Password.RequireUppercase = false;
     option.Password.RequiredUniqueChars = 3;
     option.Password.RequireNonAlphanumeric = false;
+
+    /** configure to comfirm Email when login */
+    option.SignIn.RequireConfirmedEmail = true;
 }).AddEntityFrameworkStores<AppDbContext>();
 
 /** Change Access Denied Route Configuration */
