@@ -1,4 +1,5 @@
 using Asp.netCore_MVC.Models;
+using Asp.netCore_MVC.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -57,15 +58,14 @@ builder.Services.AddAuthorization(option =>
     option.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role"));
 
     /** Custom Policy Using RequireAssertion */
-    option.AddPolicy("EditRolePolicy", policy => policy.RequireAssertion(context => 
-        (context.User.IsInRole("Admin") &&
-        context.User.HasClaim(claim => claim.Type == "Edit Role" && claim.Value == "true")) ||
-        context.User.IsInRole("Super Admin")));
+    option.AddPolicy("EditRolePolicy", 
+        policy => policy.AddRequirements(new ManageAdminRolesAndClaimsRequirement()));
 
     option.AddPolicy("AdminRolePolicy", policy => policy.RequireRole("Admin"));
 });
 
 builder.Services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
+builder.Services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimsHandler>();
 
 
 /**

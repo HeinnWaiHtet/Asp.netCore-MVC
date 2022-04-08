@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace Asp.netCore_MVC.Controllers
 {
-    [Authorize(Policy = "AdminRolePolicy")]
+    //[Authorize(Policy = "AdminRolePolicy")]
     public class AdministrationController : Controller
     {
         #region Properties
@@ -102,7 +102,6 @@ namespace Asp.netCore_MVC.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> EditRole(string id)
         {
             /** Get User role by request Roleid */
@@ -376,6 +375,7 @@ namespace Asp.netCore_MVC.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> ManageUserRoles(string userId)
         {
             ViewBag.userId = userId;
@@ -424,6 +424,7 @@ namespace Asp.netCore_MVC.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> ManageUserRoles(List<UserRolesViewModel> model, string userId)
         {
             ViewBag.userId = userId;
