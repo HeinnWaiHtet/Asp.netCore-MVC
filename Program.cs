@@ -58,8 +58,8 @@ builder.Services.AddAuthorization(option =>
     option.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role"));
 
     /** Custom Policy Using RequireAssertion */
-    option.AddPolicy("EditRolePolicy",
-        policy => policy.AddRequirements(new ManageAdminRolesAndClaimsRequirement()));
+    //option.AddPolicy("EditRolePolicy",
+    //    policy => policy.AddRequirements(new ManageAdminRolesAndClaimsRequirement()));
 
     option.AddPolicy("AdminRolePolicy", policy => policy.RequireRole("Admin"));
 });

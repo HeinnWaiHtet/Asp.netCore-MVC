@@ -375,7 +375,7 @@ namespace Asp.netCore_MVC.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(Policy = "EditRolePolicy")]
+        //[Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> ManageUserRoles(string userId)
         {
             ViewBag.userId = userId;
@@ -424,7 +424,7 @@ namespace Asp.netCore_MVC.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize(Policy = "EditRolePolicy")]
+        //[Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> ManageUserRoles(List<UserRolesViewModel> model, string userId)
         {
             ViewBag.userId = userId;
