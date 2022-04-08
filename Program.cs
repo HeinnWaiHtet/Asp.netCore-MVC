@@ -30,14 +30,30 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
 
     /** configure to comfirm Email when login */
     option.SignIn.RequireConfirmedEmail = true;
+
+    /** Custom Email Lifespan Token */
+    option.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
 })
     .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
+    .AddDefaultTokenProviders()
+    .AddTokenProvider<CustomEmailConfirmationTokenProvider<ApplicationUser>>("CustomEmailConfirmation");
 
 /** Change Access Denied Route Configuration */
 builder.Services.ConfigureApplicationCookie(option =>
 {
     option.AccessDeniedPath = new PathString("/Administration/AccessDenied");
+});
+
+/** Set Password Reset Token Time */
+builder.Services.Configure<DataProtectionTokenProviderOptions>(option =>
+{
+    option.TokenLifespan = TimeSpan.FromHours(5);
+});
+
+/** Custom Email Token LifeSpan */
+builder.Services.Configure<CustomEmailConfirmationTokenProviderOptions>(option =>
+{
+    option.TokenLifespan = TimeSpan.FromDays(3);
 });
 
 builder.Services.AddControllersWithViews(config =>
