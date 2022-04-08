@@ -332,6 +332,22 @@ namespace Asp.netCore_MVC.Controllers
                         };
 
                         await userManager.CreateAsync(user);
+
+                        /** create Email confirmation token */
+                        var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                        /** Email Confirmation Link */
+                        var confirmationLink = Url.Action("confirmEmail", "Account",
+                            new { userId = user.Id, token = token }, Request.Scheme);
+
+                        logger.Log(LogLevel.Warning, confirmationLink);
+
+                        /** Show Email Confirmation Required Error */
+                        ViewBag.ErrorTitle = "Registration Successful";
+                        ViewBag.ErrorMessage = "Before login, Please confirm your Email, By clicking" +
+                            "Confimation link";
+
+                        return this.View("Error");
                     }
 
                     await userManager.AddLoginAsync(user, info);
