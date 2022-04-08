@@ -33,6 +33,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
 
     /** Custom Email Lifespan Token */
     option.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
+
+    /** configure password wrong lock */
+    option.Lockout.MaxFailedAccessAttempts = 5;
+    option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
 })
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders()

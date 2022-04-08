@@ -203,7 +203,7 @@ namespace Asp.netCore_MVC.Controllers
                     model.Email,
                     model.Password,
                     model.RememberMe,
-                    false);
+                    true);
 
                 if (result.Succeeded)
                 {
@@ -214,6 +214,12 @@ namespace Asp.netCore_MVC.Controllers
                     }
 
                     return this.RedirectToAction("Index", "Home");
+                }
+
+                /** Check Lockedout or not */
+                if (result.IsLockedOut)
+                {
+                    return this.View("AccountLocked");
                 }
 
                 /** Add Model Error */
@@ -454,6 +460,7 @@ namespace Asp.netCore_MVC.Controllers
                     var result = await userManager.ResetPasswordAsync(user, model.Token, model.Password);
                     if (result.Succeeded)
                     {
+                        /** check lock user or not */
                         if (await userManager.IsLockedOutAsync(user))
                         {
                             await userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow);
