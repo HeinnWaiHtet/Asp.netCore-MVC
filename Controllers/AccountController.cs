@@ -3,6 +3,7 @@ using Asp.netCore_MVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Asp.netCore_MVC.Controllers
 {
@@ -181,6 +182,94 @@ namespace Asp.netCore_MVC.Controllers
             /** Return TO Local Url After External Login */
             return new ChallengeResult(provider, properties);
         }
+
+        /// <summary>
+        /// Check Error and Login after redirect login using external login
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <param name="remoteError"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        public async Task<IActionResult> ExternalLoginCallback(
+            string returnUrl = null,
+            string remoteError = null)
+        {
+            /** check returnUrl has or not */
+            returnUrl = returnUrl ?? Url.Content("~/");
+
+            /** Create login ViewModel */
+            var loginViewModel = new LoginViewModel
+            {
+                ReturnUrl = returnUrl,
+                ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+            };
+
+            /** check remoteError has or not */
+            if(remoteError != null)
+            {
+                ModelState.AddModelError(string.Empty,
+                    $"Error From External provider : {remoteError}");
+                return this.View("Login", loginViewModel);
+            }
+
+            /** Get External login information */
+            var info = await signInManager.GetExternalLoginInfoAsync();
+            if(info == null)
+            {
+                ModelState.AddModelError(string.Empty,
+                    "Error loading external login");
+                return this.View("login", loginViewModel);
+            }
+
+            /** Login using external login provider */
+            var signInResult = await signInManager.ExternalLoginSignInAsync(info.LoginProvider,
+                info.ProviderKey,
+                isPersistent: false,
+                bypassTwoFactor: true);
+
+            if(signInResult.Succeeded)
+            {
+                return this.LocalRedirect(returnUrl);
+            }
+            else
+            {
+                /** Get LoginEmail Claim Type */
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+                /** check email register or not */
+                if (email != null)
+                {
+                    var user = await userManager.FindByEmailAsync(email);
+
+                    /** check User is already register or not */
+                    if(user == null)
+                    {
+                        user = new ApplicationUser
+                        {
+                            UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
+                            Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+
+                        };
+
+                        await userManager.CreateAsync(user);
+                    }
+
+                    await userManager.AddLoginAsync(user, info);
+                    await signInManager.SignInAsync(user, isPersistent: false);
+
+                    return this.LocalRedirect(returnUrl);
+                }
+
+                ViewBag.ErrorTitle = $"Email Clamim not recived from : {info.LoginProvider}";
+                ViewBag.ErrorMessage = "Please Contact support team";
+
+                return this.View("Error");
+
+            }
+
+            return this.View("login", loginViewModel);
+        }
+
         #endregion
 
         #region Logout
