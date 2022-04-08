@@ -368,6 +368,53 @@ namespace Asp.netCore_MVC.Controllers
 
         #endregion
 
+        #region ForgotPassword
+
+        /// <summary>
+        /// Forgot Password View
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Forgot Password Email Confirmation Send
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                /** Get User By Email */
+                var user = await userManager.FindByEmailAsync(model.Email);
+
+                /** Check Email confirm or not */
+                if (user != null && await userManager.IsEmailConfirmedAsync(user))
+                {
+                    var token = await userManager.GeneratePasswordResetTokenAsync(user);
+
+                    var passwordResetLink = Url.Action("ResetPassword", "Account",
+                            new { email = model.Email, token = token }, Request.Scheme);
+
+                    logger.Log(LogLevel.Warning, passwordResetLink);
+
+                    return View("ForgotPasswordConfirmation");
+                }
+
+                return View("ForgotPasswordConfirmation");
+            }
+
+            return View(model);
+        }
+        #endregion
+
         #region Logout
 
         /// <summary>
