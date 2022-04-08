@@ -58,7 +58,7 @@ builder.Services.AddAuthorization(option =>
     option.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role"));
 
     /** Custom Policy Using RequireAssertion */
-    option.AddPolicy("EditRolePolicy", 
+    option.AddPolicy("EditRolePolicy",
         policy => policy.AddRequirements(new ManageAdminRolesAndClaimsRequirement()));
 
     option.AddPolicy("AdminRolePolicy", policy => policy.RequireRole("Admin"));
@@ -66,6 +66,7 @@ builder.Services.AddAuthorization(option =>
 
 builder.Services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
 builder.Services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimsHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();
 
 
 /**
