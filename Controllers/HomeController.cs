@@ -1,6 +1,8 @@
 ﻿using Asp.netCore_MVC.Models;
+using Asp.netCore_MVC.Security;
 using Asp.netCore_MVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Asp.netCore_MVC.Controllers
@@ -12,6 +14,8 @@ namespace Asp.netCore_MVC.Controllers
 
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IWebHostEnvironment hostingEnvironment;
+        private readonly ILogger<HomeController> logger;
+        private readonly IDataProtector protector;
 
         #endregion
 
@@ -21,12 +25,21 @@ namespace Asp.netCore_MVC.Controllers
         /// HomeController Constructor
         /// </summary>
         /// <param name="employeeRepository"></param>
+        /// <param name="hostingEnvironment"></param>
+        /// <param name="logger"></param>
+        /// <param name="dataProtectionProvider"></param>
+        /// <param name="dataProtectionPurposeStrings"></param>
         public HomeController(
             IEmployeeRepository employeeRepository,
-            IWebHostEnvironment hostingEnvironment)
+            IWebHostEnvironment hostingEnvironment,
+            ILogger<HomeController> logger,
+            IDataProtectionProvider dataProtectionProvider,
+            DataProtectionPurposeStrings dataProtectionPurposeStrings)
         {
             _employeeRepository = employeeRepository;
             this.hostingEnvironment = hostingEnvironment;
+            this.logger = logger;
+            this.protector = dataProtectionProvider.CreateProtector(dataProtectionPurposeStrings.EmployeeIdRouteValue);
         }
 
         #endregion
@@ -40,7 +53,13 @@ namespace Asp.netCore_MVC.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            var employee = this._employeeRepository.GetAllEmployees();
+            var employee = this._employeeRepository.GetAllEmployees()
+                .Select(e =>
+                {
+                    /** Encrypted UserId */
+                    e.EncryptedId = this.protector.Protect(e.Id.ToString());
+                    return e;
+                });
             return this.View(employee);
         }
 
@@ -53,13 +72,16 @@ namespace Asp.netCore_MVC.Controllers
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]
-        public IActionResult Details(int? id)
+        public IActionResult Details(string id)
         {
-            var employee = _employeeRepository.GetEmployeeById(id.Value);
+            /** Decrypted EmployeeId */
+            int employeeId = Convert.ToInt32(protector.Unprotect(id));
+
+            var employee = _employeeRepository.GetEmployeeById(employeeId);
             if(employee == null)
             {
                 Response.StatusCode = 404;
-                return this.View("EmployeeNotFound", id.Value);
+                return this.View("EmployeeNotFound", employeeId);
             }
 
             HomeDetailsViewModel viewModel = new HomeDetailsViewModel()

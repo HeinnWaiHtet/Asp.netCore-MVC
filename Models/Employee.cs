@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Asp.netCore_MVC.Models
 {
@@ -8,6 +9,9 @@ namespace Asp.netCore_MVC.Models
         /// Employee Id
         /// </summary>
         public int Id { get; set; }
+
+        [NotMapped]
+        public string? EncryptedId { get; set; }
 
         /// <summary>
         /// Employee Name

@@ -98,6 +98,8 @@ builder.Services.AddAuthorization(option =>
 builder.Services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
 builder.Services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimsHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();
+/** add Encryption Configuration */
+builder.Services.AddSingleton<DataProtectionPurposeStrings>();
 
 
 /**
