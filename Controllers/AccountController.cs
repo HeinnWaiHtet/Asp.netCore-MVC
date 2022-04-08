@@ -13,16 +13,19 @@ namespace Asp.netCore_MVC.Controllers
 
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly ILogger<AccountController> logger;
 
         #endregion
 
         #region Constructor
 
         public AccountController(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            ILogger<AccountController> logger)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.logger = logger;
         }
         #endregion
 
@@ -78,15 +81,27 @@ namespace Asp.netCore_MVC.Controllers
 
                 if (result.Succeeded)
                 {
+                    /** create Email confirmation token */
+                    var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                    /** Email Confirmation Link */
+                    var confirmationLink = Url.Action("confirmEmail", "Account",
+                        new { userId = user.Id, token = token }, Request.Scheme);
+
+                    logger.Log(LogLevel.Warning, confirmationLink);
+
                     /** Check User is login or not and login user role is admin or not */
                     if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
                         return RedirectToAction("ListUsers", "Administration");
                     }
 
-                    /** Login Create User using SignInManager.SignInAsync */
-                    await signInManager.SignInAsync(user, isPersistent: false);
-                    return this.RedirectToAction("Index", "Home");
+                    /** Show Email Confirmation Required Error */
+                    ViewBag.ErrorTitle = "Registration Successful";
+                    ViewBag.ErrorMessage = "Before login, Please confirm your Email, By clicking" +
+                        "Confimation link";
+
+                    return this.View("Error");
                 }
 
                 foreach (var errors in result.Errors)
@@ -98,6 +113,44 @@ namespace Asp.netCore_MVC.Controllers
 
             return View(model);
         }
+
+        #region EmailConfrimation
+
+        /// <summary>
+        /// Add Email Confirmation by userId and token
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult> ConfirmEmail(string userId, string token)
+        {
+            /** Check request userid and token */
+            if(userId == null || token == null)
+            {
+                return this.RedirectToAction("index", "home");
+            }
+
+            var user = await userManager.FindByIdAsync(userId);
+            if(user == null)
+            {
+                ViewBag.ErrorMessage = $"The user Id {userId} is invalid";
+                return this.View("NotFound");
+            }
+
+            /** Confirm email */
+            var result = await userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return this.View();
+            }
+
+            /** Add Error When Email Confimation Failed. */
+            ViewBag.ErrorTitle = "Email cannot be confirmed";
+            return this.View("Error");
+        }
+        #endregion
 
         #endregion
 

@@ -30,7 +30,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
 
     /** configure to comfirm Email when login */
     option.SignIn.RequireConfirmedEmail = true;
-}).AddEntityFrameworkStores<AppDbContext>();
+})
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 
 /** Change Access Denied Route Configuration */
 builder.Services.ConfigureApplicationCookie(option =>
