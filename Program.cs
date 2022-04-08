@@ -39,12 +39,6 @@ builder.Services.ConfigureApplicationCookie(option =>
     option.AccessDeniedPath = new PathString("/Administration/AccessDenied");
 });
 
-builder.Services.AddAuthentication().AddGoogle(option =>
-{
-    option.ClientId = "104533418000-f1842ur4s3ossfilvda5n5050bqhf75i.apps.googleusercontent.com";
-    option.ClientSecret = "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";
-});
-
 builder.Services.AddControllersWithViews(config =>
 {
     /** Cofigure Authorization Polic where user is authorize or not */
@@ -53,6 +47,19 @@ builder.Services.AddControllersWithViews(config =>
     .Build();
     config.Filters.Add(new AuthorizeFilter(policy));
 });
+
+/** External Login Configuration */
+builder.Services.AddAuthentication()
+    .AddGoogle(option =>
+    {
+        option.ClientId = "104533418000-f1842ur4s3ossfilvda5n5050bqhf75i.apps.googleusercontent.com";
+        option.ClientSecret = "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";
+    })
+    .AddFacebook(option =>
+    {
+        option.ClientId = "727053895344949";
+        option.ClientSecret = "8e3cf1b5c9f6b6db515898ed42f9ce65";
+    });
 
 /** Configure Nlog Setting */
 builder.Logging.ClearProviders();
